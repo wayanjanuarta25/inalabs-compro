@@ -1,0 +1,37 @@
+# Nginx Configuration Template for Hostinger VPS
+# Path: /etc/nginx/sites-available/yourdomain.com
+
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+
+    # Redirect HTTP to HTTPS (uncomment after installing SSL via certbot)
+    # return 301 https://$host$request_uri;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Cache static files
+    location /_next/static {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_cache_bypass $http_upgrade;
+        expires 365d;
+        access_log off;
+    }
+
+    # Public static files
+    location /images {
+        proxy_pass http://127.0.0.1:3000;
+        expires 30d;
+        access_log off;
+    }
+}

@@ -1,26 +1,153 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-main: #050505;
+  --bg-surface: #080808;
+  --bg-card: #0a0a0a;
+  --bg-subtle: #111111;
+  --border-hairline: rgba(255, 255, 255, 0.07);
+  --border-focus: rgba(255, 255, 255, 0.2);
+  --foreground: #ededed;
+  --text-muted: #888888;
+}
+
+html.light,
+[data-theme="light"] {
+  --bg-main: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-subtle: #f1f5f9;
+  --border-hairline: rgba(0, 0, 0, 0.08);
+  --border-focus: rgba(0, 0, 0, 0.25);
+  --foreground: #1e293b;
+  --text-muted: #64748b;
+  color-scheme: light;
+}
+
+html.dark,
+[data-theme="dark"] {
+  --bg-main: #050505;
+  --bg-surface: #080808;
+  --bg-card: #0a0a0a;
+  --bg-subtle: #111111;
+  --border-hairline: rgba(255, 255, 255, 0.07);
+  --border-focus: rgba(255, 255, 255, 0.2);
+  --foreground: #ededed;
+  --text-muted: #888888;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-dark-950: #050505;
+  --color-dark-900: #080808;
+  --color-dark-800: #111111;
+  --color-dark-700: #161616;
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: var(--font-space), var(--font-inter), sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+  background-color: var(--bg-main);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--bg-main);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+html.light ::selection {
+  background: rgba(15, 23, 42, 0.15);
+  color: #0f172a;
+}
+
+/* Minimal Studio Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: #222222;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #444444;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Subtle Film Grain Noise Texture */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  content: "";
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 100;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+html.light .noise-overlay {
+  opacity: 0.015;
+}
+
+/* Precision Hairline Dividers */
+.hairline-b {
+  border-bottom: 1px solid var(--border-hairline);
+}
+.hairline-t {
+  border-top: 1px solid var(--border-hairline);
+}
+.hairline-x {
+  border-left: 1px solid var(--border-hairline);
+  border-right: 1px solid var(--border-hairline);
+}
+
+/* Subtle Atmosphere Lighting */
+.radial-spotlight {
+  background: radial-gradient(circle 800px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.035), transparent 40%);
+}
+
+.ambient-glow-top {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1000px;
+  height: 500px;
+  background: radial-gradient(ellipse at top, rgba(56, 102, 224, 0.08), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+html.light .ambient-glow-top {
+  background: radial-gradient(ellipse at top, rgba(37, 99, 235, 0.07), transparent 70%);
+}
+
+/* Editorial Typography Utility */
+.editorial-title {
+  letter-spacing: -0.04em;
+  line-height: 1.05;
 }
