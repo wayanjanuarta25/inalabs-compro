@@ -1,16 +1,14 @@
 [
   {
     "id": "1a90c5c8-1122-4a0b-8d19-91890ef00001",
-    "title": "Inalabs AI Platform",
-    "slug": "inalabs-ai-platform",
-    "image": "/images/featured-ai-platform.jpg",
-    "description": "A business intelligence platform powered by machine learning, providing real-time data synthesis and autonomous forecasting for modern enterprises.",
-    "category": "AI Systems",
-    "project_url": "https://github.com/inalabs-indonesia",
+    "title": "MDMC Relawan Platform",
+    "slug": "mdmc-relawan-platform",
+    "image": "/uploads/1790658512773-px8lmc.png",
+    "description": "Platform pengelolaan data relawan MDMC yang aman, terstruktur, dan siap mendukung koordinasi kebencanaan dari daerah hingga tingkat nasional.",
+    "category": "Website Development",
+    "project_url": "https://github.com/wayanjanuarta25/mdmcbali-monitoring-relawan",
     "technologies": [
-      "React",
-      "Python",
-      "AI"
+      "Next.js"
     ],
     "featured": true,
     "created_at": "2026-03-15T08:00:00Z",
@@ -40,7 +38,8 @@
         }
       ],
       "isDemo": true
-    }
+    },
+    "updated_at": "2026-09-29T05:08:54.837Z"
   },
   {
     "id": "2b81d6d9-2233-4b1c-9e20-029a1ef00002",

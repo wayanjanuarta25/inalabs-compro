@@ -466,7 +466,7 @@ export default function AdminPage() {
               {filtered.map((proj) => (
                 <tr key={proj.id} className="hover:bg-white/[0.02] transition-colors">
                   <td className="py-3 px-4">
-                    <div className="w-12 h-12 rounded-lg overflow-hidden border border-white/10 bg-[#0e0e18]">
+                    <div className="w-16 aspect-video rounded-lg overflow-hidden border border-white/10 bg-[#0e0e18]">
                       <img src={proj.image} alt={proj.title} className="w-full h-full object-cover" />
                     </div>
                   </td>
@@ -624,13 +624,13 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Image Upload / 1:1 Aspect Ratio Preview */}
+              {/* Image Upload / 16:9 Landscape Aspect Ratio Preview */}
               <div>
                 <label className="block text-xs font-mono text-gray-300 mb-1">
-                  1:1 Square Project Image (Storage or URL) *
+                  16:9 Landscape Project Image (Storage or URL) *
                 </label>
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-xl overflow-hidden border border-white/10 bg-[#0c0c16] shrink-0">
+                  <div className="w-28 aspect-video rounded-xl overflow-hidden border border-white/10 bg-[#0c0c16] shrink-0">
                     {formData.image ? (
                       <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
                     ) : (

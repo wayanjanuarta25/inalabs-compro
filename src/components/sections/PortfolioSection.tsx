@@ -3,11 +3,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, ZoomIn } from 'lucide-react';
 import { Project } from '@/types/project';
 import { fetchAllProjects } from '@/lib/projectService';
 import { useLanguage } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
+import ImageLightbox, { LightboxData } from '@/components/ui/ImageLightbox';
 
 type FilterKey = 'all' | 'toolsAutomation' | 'webCompanyProfile' | 'designGraphic' | 'contentAI';
 
@@ -15,6 +16,7 @@ export default function PortfolioSection() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
+  const [lightboxData, setLightboxData] = useState<LightboxData | null>(null);
   const { t } = useLanguage();
   const { theme } = useTheme();
 
@@ -167,24 +169,53 @@ export default function PortfolioSection() {
               >
                 <Link href={`/projects/${project.slug}`} className="flex flex-col h-full justify-between">
                   <div>
-                    {/* Image Container (16:10 ratio) */}
+                    {/* Image Container (16:9 landscape ratio - Clickable Preview) */}
                     <div
-                      className={`relative aspect-[16/10] w-full rounded-xl overflow-hidden mb-4 border transition-all ${
+                      role="button"
+                      tabIndex={0}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setLightboxData({
+                          image: project.image,
+                          title: project.title,
+                          category: project.category,
+                          description: project.description,
+                          slug: project.slug,
+                          projectUrl: project.project_url,
+                        });
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setLightboxData({
+                            image: project.image,
+                            title: project.title,
+                            category: project.category,
+                            description: project.description,
+                            slug: project.slug,
+                            projectUrl: project.project_url,
+                          });
+                        }
+                      }}
+                      className={`relative aspect-video w-full rounded-xl overflow-hidden mb-4 border transition-all cursor-zoom-in group/img ${
                         isLight
                           ? 'bg-slate-100 border-black/[0.06]'
                           : 'bg-[#111111] border-white/[0.06]'
                       }`}
+                      title="Klik untuk memperbesar gambar"
                     >
                       <img
                         src={project.image}
                         alt={project.title}
-                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                        className="w-full h-full object-cover object-center group-hover/img:scale-105 transition-transform duration-500 ease-out"
                         loading="lazy"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
                       {/* Category & Featured Badge */}
-                      <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                      <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap z-10 pointer-events-none">
                         <span className="px-2 py-0.5 rounded bg-black/70 backdrop-blur-md border border-white/[0.12] text-[10px] font-mono text-neutral-200">
                           {project.category}
                         </span>
@@ -193,6 +224,14 @@ export default function PortfolioSection() {
                             Featured
                           </span>
                         )}
+                      </div>
+
+                      {/* Zoom Indicator on Hover */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity duration-200 bg-black/35 pointer-events-none">
+                        <span className="px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-white font-mono text-[11px] flex items-center gap-1.5 shadow-lg">
+                          <ZoomIn className="w-3.5 h-3.5 text-cyan-400" />
+                          <span>Klik Gambar</span>
+                        </span>
                       </div>
                     </div>
 
@@ -254,6 +293,12 @@ export default function PortfolioSection() {
           </div>
         )}
 
+        {/* Image Lightbox Modal */}
+        <ImageLightbox
+          isOpen={!!lightboxData}
+          onClose={() => setLightboxData(null)}
+          data={lightboxData}
+        />
       </div>
     </section>
   );

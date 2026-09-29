@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -10,10 +10,12 @@ import {
   User,
   ShieldAlert,
   ArrowRight,
+  ZoomIn,
 } from 'lucide-react';
 import { Project } from '@/types/project';
 import { useLanguage } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
+import ImageLightbox, { LightboxData } from '@/components/ui/ImageLightbox';
 
 interface ProjectDetailClientProps {
   project: Project;
@@ -26,6 +28,7 @@ export default function ProjectDetailClient({
 }: ProjectDetailClientProps) {
   const { t, language } = useLanguage();
   const { theme } = useTheme();
+  const [lightboxData, setLightboxData] = useState<LightboxData | null>(null);
   const isLight = theme === 'light';
   const caseStudy = project.case_study;
 
@@ -79,19 +82,42 @@ export default function ProjectDetailClient({
             }`}
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
-              {/* Responsive Showcase Image (16:10 on mobile/tablet, 1:1 on desktop) */}
+              {/* Responsive Showcase Image (16:9 landscape ratio - Clickable) */}
               <div
-                className={`lg:col-span-6 relative aspect-[16/10] lg:aspect-square w-full rounded-2xl overflow-hidden border shadow-xl ${
+                role="button"
+                tabIndex={0}
+                onClick={() =>
+                  setLightboxData({
+                    image: project.image,
+                    title: project.title,
+                    category: project.category,
+                    description: project.description,
+                    projectUrl: project.project_url,
+                  })
+                }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setLightboxData({
+                      image: project.image,
+                      title: project.title,
+                      category: project.category,
+                      description: project.description,
+                      projectUrl: project.project_url,
+                    });
+                  }
+                }}
+                className={`lg:col-span-6 relative aspect-video w-full rounded-2xl overflow-hidden border shadow-xl cursor-zoom-in group/heroimg transition-all ${
                   isLight ? 'border-black/[0.08]' : 'border-white/10'
                 }`}
+                title="Klik untuk memperbesar gambar"
               >
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover object-center"
+                  className="w-full h-full object-cover object-center group-hover/heroimg:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between z-10 pointer-events-none">
                   <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-md bg-black/70 backdrop-blur-md text-cyan-300 font-mono text-[11px] sm:text-xs border border-white/10">
                     {project.category}
                   </span>
@@ -100,6 +126,14 @@ export default function ProjectDetailClient({
                       Featured
                     </span>
                   )}
+                </div>
+
+                {/* Hover Zoom Prompt */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/heroimg:opacity-100 transition-opacity duration-200 bg-black/30 pointer-events-none">
+                  <span className="px-3 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-white font-mono text-xs flex items-center gap-1.5 shadow-xl">
+                    <ZoomIn className="w-4 h-4 text-cyan-400" />
+                    <span>Perbesar Gambar (16:9)</span>
+                  </span>
                 </div>
               </div>
 
@@ -395,12 +429,34 @@ export default function ProjectDetailClient({
                         : 'bg-[#090912] border-white/[0.06] hover:border-white/[0.2]'
                     }`}
                   >
-                    <div className="aspect-[16/10] sm:aspect-square w-full rounded-xl overflow-hidden mb-3">
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setLightboxData({
+                          image: p.image,
+                          title: p.title,
+                          category: p.category,
+                          description: p.description,
+                          slug: p.slug,
+                          projectUrl: p.project_url,
+                        });
+                      }}
+                      className="relative aspect-video w-full rounded-xl overflow-hidden mb-3 cursor-zoom-in group/rel"
+                      title="Klik untuk melihat pratinjau gambar"
+                    >
                       <img
                         src={p.image}
                         alt={p.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover group-hover/rel:scale-105 transition-transform duration-500"
                       />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/rel:opacity-100 transition-opacity bg-black/35 pointer-events-none">
+                        <span className="p-1.5 rounded-full bg-black/80 text-white border border-white/20">
+                          <ZoomIn className="w-3.5 h-3.5 text-cyan-400" />
+                        </span>
+                      </div>
                     </div>
                     <span className="text-[10px] font-mono text-cyan-500">{p.category}</span>
                     <h4
@@ -419,6 +475,13 @@ export default function ProjectDetailClient({
           </div>
         )}
       </div>
+
+      {/* Image Lightbox Modal */}
+      <ImageLightbox
+        isOpen={!!lightboxData}
+        onClose={() => setLightboxData(null)}
+        data={lightboxData}
+      />
     </div>
   );
 }
