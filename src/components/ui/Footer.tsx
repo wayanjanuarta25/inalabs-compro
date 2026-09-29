@@ -36,7 +36,7 @@ export default function Footer() {
 
   return (
     <footer
-      className={`relative z-10 border-t transition-colors ${
+      className={`relative z-10 border-t transition-colors w-full max-w-full overflow-hidden ${
         isLight
           ? 'bg-slate-50 border-black/[0.08] text-slate-600'
           : 'bg-[#050505] border-white/[0.07] text-neutral-400'

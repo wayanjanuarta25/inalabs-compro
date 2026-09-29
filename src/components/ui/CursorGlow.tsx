@@ -33,10 +33,11 @@ export default function CursorGlow() {
 
   return (
     <div
-      className="fixed pointer-events-none -z-5 transition-opacity duration-500 will-change-transform"
+      className="hidden md:block fixed pointer-events-none -z-5 transition-opacity duration-500 will-change-transform"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
+        transform: 'translate(-50%, -50%)',
         width: '600px',
         height: '600px',
         background: isLight

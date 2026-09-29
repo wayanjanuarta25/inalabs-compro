@@ -160,13 +160,15 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-[var(--bg-main)] text-[var(--foreground)] antialiased relative overflow-x-hidden transition-colors duration-300">
+      <body className="min-h-screen w-full max-w-full bg-[var(--bg-main)] text-[var(--foreground)] antialiased relative overflow-x-clip transition-colors duration-300">
         <ClientProviders>
           {/* Subtle Film Grain Texture */}
           <div className="noise-overlay" />
 
-          {/* Ambient Subtle Studio Top Glow */}
-          <div className="ambient-glow-top" />
+          {/* Ambient Subtle Studio Top Glow (Strictly clipped) */}
+          <div className="absolute top-0 left-0 right-0 h-[500px] overflow-hidden pointer-events-none -z-10">
+            <div className="ambient-glow-top" />
+          </div>
 
           {/* Minimal Stardust Ambient Background */}
           <ParticleCanvas />
@@ -178,7 +180,7 @@ export default function RootLayout({
           <Navbar />
 
           {/* Dynamic Page Content */}
-          <main className="relative z-10 flex-grow">
+          <main className="relative z-10 flex-grow w-full max-w-full overflow-x-clip">
             {children}
           </main>
 
