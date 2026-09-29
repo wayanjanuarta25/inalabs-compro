@@ -65,23 +65,23 @@ export default function ProjectDetailClient({
 
         {/* Project Header Banner */}
         <div
-          className={`rounded-3xl p-[1px] mb-12 shadow-2xl transition-all ${
+          className={`rounded-3xl p-[1px] mb-10 sm:mb-12 shadow-2xl transition-all ${
             isLight
               ? 'bg-gradient-to-b from-black/[0.1] via-black/[0.04] to-transparent shadow-slate-200/50'
               : 'bg-gradient-to-b from-blue-500/30 via-purple-500/20 to-cyan-500/10'
           }`}
         >
           <div
-            className={`rounded-[23px] p-6 sm:p-10 border transition-colors ${
+            className={`rounded-[23px] p-4 sm:p-7 lg:p-10 border transition-colors ${
               isLight
                 ? 'bg-white/95 backdrop-blur-2xl border-black/[0.06]'
                 : 'bg-[#090912]/95 backdrop-blur-2xl border-white/[0.06]'
             }`}
           >
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              {/* 1:1 Large Showcase Image */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
+              {/* Responsive Showcase Image (16:10 on mobile/tablet, 1:1 on desktop) */}
               <div
-                className={`lg:col-span-6 relative aspect-square w-full rounded-2xl overflow-hidden border shadow-xl ${
+                className={`lg:col-span-6 relative aspect-[16/10] lg:aspect-square w-full rounded-2xl overflow-hidden border shadow-xl ${
                   isLight ? 'border-black/[0.08]' : 'border-white/10'
                 }`}
               >
@@ -91,12 +91,12 @@ export default function ProjectDetailClient({
                   className="w-full h-full object-cover object-center"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                  <span className="px-3 py-1 rounded-md bg-black/70 backdrop-blur-md text-cyan-300 font-mono text-xs border border-white/10">
+                <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between">
+                  <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-md bg-black/70 backdrop-blur-md text-cyan-300 font-mono text-[11px] sm:text-xs border border-white/10">
                     {project.category}
                   </span>
                   {project.featured && (
-                    <span className="px-3 py-1 rounded-md bg-blue-600 text-white font-mono text-xs font-bold uppercase">
+                    <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-md bg-blue-600 text-white font-mono text-[10px] sm:text-xs font-bold uppercase">
                       Featured
                     </span>
                   )}
@@ -104,7 +104,7 @@ export default function ProjectDetailClient({
               </div>
 
               {/* Core Details */}
-              <div className="lg:col-span-6 space-y-6">
+              <div className="lg:col-span-6 space-y-5 sm:space-y-6">
                 <div>
                   <div className="flex items-center gap-2 text-xs font-mono text-cyan-500 mb-2">
                     <span>{project.category}</span>
@@ -115,7 +115,7 @@ export default function ProjectDetailClient({
                   </div>
 
                   <h1
-                    className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display leading-tight transition-colors ${
+                    className={`text-2xl sm:text-4xl lg:text-5xl font-extrabold font-display leading-tight transition-colors ${
                       isLight ? 'text-slate-950' : 'text-white'
                     }`}
                   >
@@ -123,7 +123,7 @@ export default function ProjectDetailClient({
                   </h1>
 
                   <p
-                    className={`text-base sm:text-lg mt-4 leading-relaxed font-light ${
+                    className={`text-sm sm:text-base lg:text-lg mt-3 sm:mt-4 leading-relaxed font-light ${
                       isLight ? 'text-slate-600' : 'text-neutral-300'
                     }`}
                   >
@@ -133,13 +133,13 @@ export default function ProjectDetailClient({
 
                 {/* Metadata Tags */}
                 <div
-                  className={`grid grid-cols-2 gap-4 py-4 border-y ${
+                  className={`grid grid-cols-2 gap-3 sm:gap-4 py-4 border-y ${
                     isLight ? 'border-black/[0.06]' : 'border-white/[0.06]'
                   }`}
                 >
                   <div>
                     <p
-                      className={`text-[11px] font-mono flex items-center gap-1.5 mb-1 ${
+                      className={`text-[10px] sm:text-[11px] font-mono flex items-center gap-1.5 mb-1 ${
                         isLight ? 'text-slate-500' : 'text-neutral-400'
                       }`}
                     >
@@ -156,7 +156,7 @@ export default function ProjectDetailClient({
                   </div>
                   <div>
                     <p
-                      className={`text-[11px] font-mono flex items-center gap-1.5 mb-1 ${
+                      className={`text-[10px] sm:text-[11px] font-mono flex items-center gap-1.5 mb-1 ${
                         isLight ? 'text-slate-500' : 'text-neutral-400'
                       }`}
                     >
@@ -182,11 +182,11 @@ export default function ProjectDetailClient({
                   >
                     {t.projectDetail.techLibraries}
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {project.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-mono border transition-colors ${
+                        className={`px-2.5 py-0.5 sm:py-1 rounded-lg text-xs font-mono border transition-colors ${
                           isLight
                             ? 'bg-slate-100 border-black/[0.08] text-slate-800'
                             : 'bg-white/[0.04] border-white/[0.08] text-cyan-300'
@@ -199,13 +199,13 @@ export default function ProjectDetailClient({
                 </div>
 
                 {/* Action CTA */}
-                <div className="flex items-center gap-4 pt-2">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2 w-full sm:w-auto">
                   {project.project_url && (
                     <a
                       href={project.project_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-medium shadow-lg shadow-blue-600/30 transition-all"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-medium shadow-lg shadow-blue-600/30 transition-all active:scale-[0.98]"
                     >
                       <span>{t.projectDetail.visitLive}</span>
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -214,7 +214,7 @@ export default function ProjectDetailClient({
 
                   <Link
                     href="/#contact"
-                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-medium transition-colors border ${
+                    className={`inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-medium transition-colors border active:scale-[0.98] ${
                       isLight
                         ? 'border-black/[0.12] hover:border-black/30 text-slate-700 hover:text-slate-950'
                         : 'border-white/10 hover:border-cyan-500/40 text-neutral-300 hover:text-white'
@@ -276,9 +276,9 @@ export default function ProjectDetailClient({
             )}
 
             {/* Challenge & Solution Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
               <div
-                className={`p-8 rounded-2xl border ${
+                className={`p-5 sm:p-8 rounded-2xl border ${
                   isLight
                     ? 'bg-white border-black/[0.08] shadow-sm'
                     : 'bg-[#080808] border-white/[0.06]'
@@ -288,14 +288,14 @@ export default function ProjectDetailClient({
                   <span>{t.projectDetail.challengeBadge}</span>
                 </div>
                 <h3
-                  className={`text-xl font-bold font-display mb-3 ${
+                  className={`text-lg sm:text-xl font-bold font-display mb-3 ${
                     isLight ? 'text-slate-950' : 'text-white'
                   }`}
                 >
                   {t.projectDetail.challengeTitle}
                 </h3>
                 <p
-                  className={`text-sm leading-relaxed font-light ${
+                  className={`text-xs sm:text-sm leading-relaxed font-light ${
                     isLight ? 'text-slate-600' : 'text-neutral-400'
                   }`}
                 >
@@ -304,7 +304,7 @@ export default function ProjectDetailClient({
               </div>
 
               <div
-                className={`p-8 rounded-2xl border ${
+                className={`p-5 sm:p-8 rounded-2xl border ${
                   isLight
                     ? 'bg-white border-black/[0.08] shadow-sm'
                     : 'bg-[#080808] border-white/[0.06]'
@@ -314,14 +314,14 @@ export default function ProjectDetailClient({
                   <span>{t.projectDetail.solutionBadge}</span>
                 </div>
                 <h3
-                  className={`text-xl font-bold font-display mb-3 ${
+                  className={`text-lg sm:text-xl font-bold font-display mb-3 ${
                     isLight ? 'text-slate-950' : 'text-white'
                   }`}
                 >
                   {t.projectDetail.solutionTitle}
                 </h3>
                 <p
-                  className={`text-sm leading-relaxed font-light ${
+                  className={`text-xs sm:text-sm leading-relaxed font-light ${
                     isLight ? 'text-slate-600' : 'text-neutral-400'
                   }`}
                 >
@@ -333,7 +333,7 @@ export default function ProjectDetailClient({
             {/* Results & Key Deliverables */}
             {caseStudy.results && caseStudy.results.length > 0 && (
               <div
-                className={`p-8 rounded-2xl border ${
+                className={`p-5 sm:p-8 rounded-2xl border ${
                   isLight
                     ? 'bg-white border-black/[0.08] shadow-sm'
                     : 'bg-[#080808] border-white/[0.06]'
@@ -343,7 +343,7 @@ export default function ProjectDetailClient({
                   <span>{t.projectDetail.resultsBadge}</span>
                 </div>
                 <h3
-                  className={`text-xl font-bold font-display mb-4 ${
+                  className={`text-lg sm:text-xl font-bold font-display mb-4 ${
                     isLight ? 'text-slate-950' : 'text-white'
                   }`}
                 >
@@ -353,11 +353,11 @@ export default function ProjectDetailClient({
                   {caseStudy.results.map((res, i) => (
                     <div
                       key={i}
-                      className={`flex items-start gap-3 text-sm font-light ${
+                      className={`flex items-start gap-2.5 sm:gap-3 text-xs sm:text-sm font-light ${
                         isLight ? 'text-slate-700' : 'text-neutral-300'
                       }`}
                     >
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-1" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                       <span>{res}</span>
                     </div>
                   ))}
@@ -370,18 +370,18 @@ export default function ProjectDetailClient({
         {/* Related Projects */}
         {relatedProjects.length > 0 && (
           <div
-            className={`pt-12 border-t ${
+            className={`pt-10 sm:pt-12 border-t ${
               isLight ? 'border-black/[0.08]' : 'border-white/[0.08]'
             }`}
           >
             <h3
-              className={`text-2xl font-bold font-display mb-6 ${
+              className={`text-xl sm:text-2xl font-bold font-display mb-6 ${
                 isLight ? 'text-slate-950' : 'text-white'
               }`}
             >
               {t.projectDetail.exploreMore}
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
               {relatedProjects.map((p) => (
                 <Link
                   key={p.id}
@@ -389,13 +389,13 @@ export default function ProjectDetailClient({
                   className="group rounded-2xl p-[1px] transition-all block"
                 >
                   <div
-                    className={`rounded-[15px] p-4 border transition-colors ${
+                    className={`rounded-[15px] p-3.5 sm:p-4 border transition-colors ${
                       isLight
                         ? 'bg-white border-black/[0.08] shadow-sm hover:border-black/[0.2]'
                         : 'bg-[#090912] border-white/[0.06] hover:border-white/[0.2]'
                     }`}
                   >
-                    <div className="aspect-square w-full rounded-xl overflow-hidden mb-3">
+                    <div className="aspect-[16/10] sm:aspect-square w-full rounded-xl overflow-hidden mb-3">
                       <img
                         src={p.image}
                         alt={p.title}

@@ -12,7 +12,7 @@ export default function TrustSection() {
 
   return (
     <section
-      className={`relative py-24 sm:py-28 overflow-hidden border-t transition-colors ${
+      className={`relative py-16 sm:py-20 lg:py-28 overflow-hidden border-t transition-colors ${
         isLight
           ? 'bg-slate-100/60 border-black/[0.08]'
           : 'bg-[#070707] border-white/[0.07]'
@@ -20,13 +20,13 @@ export default function TrustSection() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
-          className={`flex flex-col md:flex-row md:items-baseline justify-between gap-6 pb-12 mb-12 border-b ${
+          className={`flex flex-col md:flex-row md:items-baseline justify-between gap-4 pb-8 sm:pb-12 mb-8 sm:mb-12 border-b ${
             isLight ? 'border-black/[0.08]' : 'border-white/[0.07]'
           }`}
         >
           <div>
             <span
-              className={`text-[11px] font-mono tracking-[0.2em] uppercase block mb-3 ${
+              className={`text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase block mb-2 sm:mb-3 ${
                 isLight ? 'text-slate-500' : 'text-neutral-500'
               }`}
             >
@@ -49,8 +49,8 @@ export default function TrustSection() {
           </p>
         </div>
 
-        {/* Minimal Editorial Sector Matrix */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8">
+        {/* Minimal Editorial Sector Matrix - Balanced for Mobile & Tablet */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
           {t.trust.sectors.map((sec, idx) => (
             <motion.div
               key={sec.name}
@@ -58,7 +58,7 @@ export default function TrustSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className="space-y-1"
+              className="space-y-1 p-2 sm:p-0"
             >
               <span
                 className={`text-[10px] font-mono block ${
@@ -68,14 +68,14 @@ export default function TrustSection() {
                 {t.trust.sectorPrefix} 0{idx + 1}
               </span>
               <p
-                className={`text-sm font-normal font-display transition-colors ${
+                className={`text-xs sm:text-sm font-normal font-display transition-colors ${
                   isLight ? 'text-slate-800' : 'text-neutral-300'
                 }`}
               >
                 {sec.name}
               </p>
               <p
-                className={`text-xs font-mono ${
+                className={`text-[11px] sm:text-xs font-mono ${
                   isLight ? 'text-slate-500' : 'text-neutral-500'
                 }`}
               >

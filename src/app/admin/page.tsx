@@ -337,22 +337,22 @@ export default function AdminPage() {
           </h1>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <Link
             href="/"
             target="_blank"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-xs text-gray-300 hover:text-white border border-white/[0.08]"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-xs text-gray-300 hover:text-white border border-white/[0.08]"
           >
             <Eye className="w-3.5 h-3.5" />
-            <span>View Live Site</span>
+            <span>View Live</span>
           </Link>
 
           <button
             onClick={handleOpenCreate}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-xs font-semibold text-white shadow-lg shadow-blue-600/30"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-xs font-semibold text-white shadow-lg shadow-blue-600/30"
           >
             <Plus className="w-4 h-4" />
-            <span>Add New Project</span>
+            <span>Add Project</span>
           </button>
 
           <button
@@ -378,34 +378,34 @@ export default function AdminPage() {
       )}
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        <div className="p-5 rounded-xl glass-panel border border-white/[0.06]">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
+        <div className="p-4 sm:p-5 rounded-xl glass-panel border border-white/[0.06]">
           <p className="text-xs font-mono text-gray-400">Total Projects</p>
-          <p className="text-2xl font-bold text-white font-display mt-1">{projects.length}</p>
+          <p className="text-xl sm:text-2xl font-bold text-white font-display mt-1">{projects.length}</p>
         </div>
-        <div className="p-5 rounded-xl glass-panel border border-white/[0.06]">
+        <div className="p-4 sm:p-5 rounded-xl glass-panel border border-white/[0.06]">
           <p className="text-xs font-mono text-gray-400">Featured Showcase</p>
-          <p className="text-2xl font-bold text-cyan-400 font-display mt-1">
+          <p className="text-xl sm:text-2xl font-bold text-cyan-400 font-display mt-1">
             {projects.filter((p) => p.featured).length}
           </p>
         </div>
-        <div className="p-5 rounded-xl glass-panel border border-white/[0.06]">
+        <div className="p-4 sm:p-5 rounded-xl glass-panel border border-white/[0.06]">
           <p className="text-xs font-mono text-gray-400">Database Engine</p>
-          <p className="text-sm font-bold text-emerald-400 font-mono mt-2 flex items-center gap-1.5">
-            <Database className="w-3.5 h-3.5" />
-            <span>{dataSource === 'supabase' ? 'Supabase Live' : 'Local / Offline Sync'}</span>
+          <p className="text-xs sm:text-sm font-bold text-emerald-400 font-mono mt-2 flex items-center gap-1.5 truncate">
+            <Database className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate">{dataSource === 'supabase' ? 'Supabase Live' : 'Local Sync'}</span>
           </p>
         </div>
-        <div className="p-5 rounded-xl glass-panel border border-white/[0.06]">
+        <div className="p-4 sm:p-5 rounded-xl glass-panel border border-white/[0.06]">
           <p className="text-xs font-mono text-gray-400">Storage Bucket</p>
-          <p className="text-sm font-bold text-purple-400 font-mono mt-2">
+          <p className="text-xs sm:text-sm font-bold text-purple-400 font-mono mt-2 truncate">
             {isSupabaseConfigured ? 'project-images' : 'DataURI / Local'}
           </p>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 mb-6">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -421,7 +421,7 @@ export default function AdminPage() {
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-[#0d0d18] border border-white/[0.08] text-xs text-white focus:outline-none"
+            className="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-[#0d0d18] border border-white/[0.08] text-xs text-white focus:outline-none"
           >
             <option value="All">All Categories</option>
             <option value="Tools Automation">Tools Automation</option>

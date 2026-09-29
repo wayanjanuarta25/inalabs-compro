@@ -43,26 +43,26 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className={`relative py-28 sm:py-36 overflow-hidden border-t transition-colors ${
+      className={`relative py-16 sm:py-24 lg:py-36 overflow-hidden border-t transition-colors ${
         isLight ? 'border-black/[0.08]' : 'border-white/[0.07]'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-14 lg:gap-24 items-start">
           
           {/* Left Column: Editorial Statement & Studio Details */}
-          <div className="lg:col-span-5 space-y-10">
+          <div className="lg:col-span-5 space-y-8 sm:space-y-10">
             <div>
               <span
-                className={`text-[11px] font-mono tracking-[0.2em] uppercase block mb-4 ${
+                className={`text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase block mb-3 sm:mb-4 ${
                   isLight ? 'text-slate-500' : 'text-neutral-500'
                 }`}
               >
                 {t.contact.kicker}
               </span>
               <h2
-                className={`text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.08] font-display transition-colors ${
+                className={`text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight leading-[1.1] sm:leading-[1.08] font-display transition-colors ${
                   isLight ? 'text-slate-950' : 'text-white'
                 }`}
               >
@@ -74,7 +74,7 @@ export default function ContactSection() {
             </div>
 
             <p
-              className={`text-base font-light leading-relaxed max-w-md ${
+              className={`text-sm sm:text-base font-light leading-relaxed max-w-md ${
                 isLight ? 'text-slate-600' : 'text-neutral-400'
               }`}
             >
@@ -83,13 +83,13 @@ export default function ContactSection() {
 
             {/* Direct Studio Contact Lines - Pure Minimalist Typography */}
             <div
-              className={`pt-8 border-t space-y-6 ${
+              className={`pt-6 sm:pt-8 border-t space-y-5 sm:space-y-6 ${
                 isLight ? 'border-black/[0.08]' : 'border-white/[0.07]'
               }`}
             >
               <div>
                 <span
-                  className={`text-[11px] font-mono uppercase tracking-wider block mb-1 ${
+                  className={`text-[10px] sm:text-[11px] font-mono uppercase tracking-wider block mb-1 ${
                     isLight ? 'text-slate-500' : 'text-neutral-500'
                   }`}
                 >
@@ -98,7 +98,7 @@ export default function ContactSection() {
                 <button
                   type="button"
                   onClick={copyEmailToClipboard}
-                  className={`inline-flex items-center gap-2 text-base font-mono transition-colors ${
+                  className={`inline-flex items-center gap-2 text-sm sm:text-base font-mono transition-colors break-all text-left ${
                     isLight
                       ? 'text-slate-950 hover:text-slate-700'
                       : 'text-white hover:text-neutral-300'
@@ -106,10 +106,10 @@ export default function ContactSection() {
                 >
                   <span>{contactEmail}</span>
                   {copiedEmail ? (
-                    <Check className="w-4 h-4 text-emerald-500" />
+                    <Check className="w-4 h-4 text-emerald-500 shrink-0" />
                   ) : (
                     <Copy
-                      className={`w-3.5 h-3.5 ${
+                      className={`w-3.5 h-3.5 shrink-0 ${
                         isLight ? 'text-slate-400' : 'text-neutral-500'
                       }`}
                     />
@@ -119,7 +119,7 @@ export default function ContactSection() {
 
               <div>
                 <span
-                  className={`text-[11px] font-mono uppercase tracking-wider block mb-1 ${
+                  className={`text-[10px] sm:text-[11px] font-mono uppercase tracking-wider block mb-1 ${
                     isLight ? 'text-slate-500' : 'text-neutral-500'
                   }`}
                 >
@@ -129,7 +129,7 @@ export default function ContactSection() {
                   href={`https://wa.me/${whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`text-base font-mono transition-colors ${
+                  className={`text-sm sm:text-base font-mono transition-colors block ${
                     isLight
                       ? 'text-slate-700 hover:text-slate-950'
                       : 'text-neutral-300 hover:text-white'
@@ -141,14 +141,14 @@ export default function ContactSection() {
 
               <div>
                 <span
-                  className={`text-[11px] font-mono uppercase tracking-wider block mb-1 ${
+                  className={`text-[10px] sm:text-[11px] font-mono uppercase tracking-wider block mb-1 ${
                     isLight ? 'text-slate-500' : 'text-neutral-500'
                   }`}
                 >
                   {t.contact.studioHQ}
                 </span>
                 <p
-                  className={`text-sm font-light ${
+                  className={`text-xs sm:text-sm font-light leading-relaxed ${
                     isLight ? 'text-slate-600' : 'text-neutral-400'
                   }`}
                 >
@@ -164,20 +164,20 @@ export default function ContactSection() {
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="py-16 sm:py-24 space-y-4"
+                className="py-12 sm:py-24 space-y-4"
               >
                 <span className="text-xs font-mono text-emerald-500 tracking-wider uppercase block">
                   {t.contact.inquiryReceived}
                 </span>
                 <h3
-                  className={`text-3xl font-normal font-display ${
+                  className={`text-2xl sm:text-3xl font-normal font-display ${
                     isLight ? 'text-slate-950' : 'text-white'
                   }`}
                 >
                   {t.contact.thankYou}
                 </h3>
                 <p
-                  className={`text-sm font-light max-w-md leading-relaxed ${
+                  className={`text-xs sm:text-sm font-light max-w-md leading-relaxed ${
                     isLight ? 'text-slate-600' : 'text-neutral-400'
                   }`}
                 >
@@ -185,7 +185,7 @@ export default function ContactSection() {
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
-                  className={`pt-6 text-xs font-mono underline underline-offset-4 ${
+                  className={`pt-4 text-xs font-mono underline underline-offset-4 ${
                     isLight
                       ? 'text-slate-600 hover:text-slate-950'
                       : 'text-neutral-400 hover:text-white'
@@ -195,9 +195,9 @@ export default function ContactSection() {
                 </button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-10 sm:space-y-12">
+              <form onSubmit={handleSubmit} className="space-y-8 sm:space-y-10">
                 {/* Field 1: Name */}
-                <div className="space-y-2">
+                <div className="space-y-1.5 sm:space-y-2">
                   <label
                     className={`text-xs font-mono uppercase tracking-wider block ${
                       isLight ? 'text-slate-500' : 'text-neutral-500'
@@ -211,7 +211,7 @@ export default function ContactSection() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder={t.contact.namePlaceholder}
-                    className={`w-full pb-3 bg-transparent border-b font-light text-base sm:text-lg transition-colors focus:outline-none ${
+                    className={`w-full pb-2.5 sm:pb-3 bg-transparent border-b font-light text-base sm:text-lg transition-colors focus:outline-none ${
                       isLight
                         ? 'border-black/[0.15] focus:border-slate-950 text-slate-950 placeholder:text-slate-400'
                         : 'border-white/[0.12] focus:border-white text-white placeholder:text-neutral-600'
@@ -220,7 +220,7 @@ export default function ContactSection() {
                 </div>
 
                 {/* Field 2: Email */}
-                <div className="space-y-2">
+                <div className="space-y-1.5 sm:space-y-2">
                   <label
                     className={`text-xs font-mono uppercase tracking-wider block ${
                       isLight ? 'text-slate-500' : 'text-neutral-500'
@@ -234,7 +234,7 @@ export default function ContactSection() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder={t.contact.emailPlaceholder}
-                    className={`w-full pb-3 bg-transparent border-b font-light text-base sm:text-lg transition-colors focus:outline-none ${
+                    className={`w-full pb-2.5 sm:pb-3 bg-transparent border-b font-light text-base sm:text-lg transition-colors focus:outline-none ${
                       isLight
                         ? 'border-black/[0.15] focus:border-slate-950 text-slate-950 placeholder:text-slate-400'
                         : 'border-white/[0.12] focus:border-white text-white placeholder:text-neutral-600'
@@ -243,7 +243,7 @@ export default function ContactSection() {
                 </div>
 
                 {/* Field 3: Scope */}
-                <div className="space-y-2">
+                <div className="space-y-1.5 sm:space-y-2">
                   <label
                     className={`text-xs font-mono uppercase tracking-wider block ${
                       isLight ? 'text-slate-500' : 'text-neutral-500'
@@ -254,7 +254,7 @@ export default function ContactSection() {
                   <select
                     value={formData.scope}
                     onChange={(e) => setFormData({ ...formData, scope: e.target.value })}
-                    className={`w-full pb-3 bg-transparent border-b font-light text-base sm:text-lg transition-colors cursor-pointer focus:outline-none ${
+                    className={`w-full pb-2.5 sm:pb-3 bg-transparent border-b font-light text-base sm:text-lg transition-colors cursor-pointer focus:outline-none ${
                       isLight
                         ? 'border-black/[0.15] focus:border-slate-950 text-slate-950'
                         : 'border-white/[0.12] focus:border-white text-white'
@@ -273,7 +273,7 @@ export default function ContactSection() {
                 </div>
 
                 {/* Field 4: Message */}
-                <div className="space-y-2">
+                <div className="space-y-1.5 sm:space-y-2">
                   <label
                     className={`text-xs font-mono uppercase tracking-wider block ${
                       isLight ? 'text-slate-500' : 'text-neutral-500'
@@ -286,7 +286,7 @@ export default function ContactSection() {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder={t.contact.messagePlaceholder}
-                    className={`w-full pb-3 bg-transparent border-b font-light text-base sm:text-lg transition-colors resize-none focus:outline-none ${
+                    className={`w-full pb-2.5 sm:pb-3 bg-transparent border-b font-light text-base sm:text-lg transition-colors resize-none focus:outline-none ${
                       isLight
                         ? 'border-black/[0.15] focus:border-slate-950 text-slate-950 placeholder:text-slate-400'
                         : 'border-white/[0.12] focus:border-white text-white placeholder:text-neutral-600'
@@ -295,11 +295,11 @@ export default function ContactSection() {
                 </div>
 
                 {/* Submit Action */}
-                <div className="pt-4">
+                <div className="pt-2 sm:pt-4">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`inline-flex items-center gap-3 px-8 py-4 rounded-full text-xs sm:text-sm font-medium tracking-tight transition-all duration-200 disabled:opacity-50 active:scale-[0.98] ${
+                    className={`inline-flex items-center justify-center gap-3 px-8 py-3.5 sm:py-4 rounded-full text-xs sm:text-sm font-medium tracking-tight transition-all duration-200 disabled:opacity-50 active:scale-[0.98] w-full sm:w-auto ${
                       isLight
                         ? 'bg-slate-950 text-white hover:bg-slate-800'
                         : 'bg-white text-black hover:bg-neutral-200'

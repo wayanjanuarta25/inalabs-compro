@@ -42,8 +42,8 @@ export default function Footer() {
           : 'bg-[#050505] border-white/[0.07] text-neutral-400'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-10 lg:gap-16">
           
           {/* Brand Info */}
           <div className="md:col-span-5 space-y-4">
@@ -81,12 +81,12 @@ export default function Footer() {
             </p>
 
             <div
-              className={`pt-2 flex items-center gap-4 text-xs font-mono ${
+              className={`pt-2 flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-mono ${
                 isLight ? 'text-slate-500' : 'text-neutral-500'
               }`}
             >
               <span>JAKARTA &bull; TOKYO R&amp;D</span>
-              <span>&bull;</span>
+              <span className="hidden sm:inline">&bull;</span>
               <span>UTC+7 / UTC+9</span>
             </div>
           </div>
@@ -228,7 +228,7 @@ export default function Footer() {
 
         {/* Studio Colophon Bottom Bar */}
         <div
-          className={`mt-16 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono ${
+          className={`mt-12 sm:mt-16 pt-6 sm:pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-center sm:text-left ${
             isLight
               ? 'border-black/[0.08] text-slate-500'
               : 'border-white/[0.07] text-neutral-500'
