@@ -36,7 +36,7 @@ export default function AdminPage() {
   const [authError, setAuthError] = useState('');
   
   const [projects, setProjects] = useState<Project[]>([]);
-  const [dataSource, setDataSource] = useState<'supabase' | 'local'>('local');
+  const [dataSource, setDataSource] = useState<'supabase' | 'server' | 'local'>('server');
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
@@ -393,13 +393,13 @@ export default function AdminPage() {
           <p className="text-xs font-mono text-gray-400">Database Engine</p>
           <p className="text-xs sm:text-sm font-bold text-emerald-400 font-mono mt-2 flex items-center gap-1.5 truncate">
             <Database className="w-3.5 h-3.5 shrink-0" />
-            <span className="truncate">{dataSource === 'supabase' ? 'Supabase Live' : 'Local Sync'}</span>
+            <span className="truncate">{dataSource === 'supabase' ? 'Supabase Live' : dataSource === 'server' ? 'Server File' : 'Local Sync'}</span>
           </p>
         </div>
         <div className="p-4 sm:p-5 rounded-xl glass-panel border border-white/[0.06]">
           <p className="text-xs font-mono text-gray-400">Storage Bucket</p>
           <p className="text-xs sm:text-sm font-bold text-purple-400 font-mono mt-2 truncate">
-            {isSupabaseConfigured ? 'project-images' : 'DataURI / Local'}
+            {isSupabaseConfigured ? 'project-images' : 'public/uploads'}
           </p>
         </div>
       </div>

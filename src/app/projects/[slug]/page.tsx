@@ -1,9 +1,11 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { fetchProjectBySlug, fetchAllProjects } from '@/lib/projectService';
 import { INITIAL_PROJECTS } from '@/data/initialProjects';
 import ProjectDetailClient from '@/components/projects/ProjectDetailClient';
+import ProjectClientFallback from '@/components/projects/ProjectClientFallback';
+
+export const dynamicParams = true;
 
 interface PageProps {
   params: Promise<{
@@ -25,8 +27,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!project) {
     return {
-      title: 'Project Not Found | Inalabs Indonesia',
-      description: 'The requested project could not be found.',
+      title: 'Project Case Study | Inalabs Indonesia',
+      description: 'Detail case study digital project Inalabs Indonesia.',
     };
   }
 
@@ -45,8 +47,9 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const project = await fetchProjectBySlug(slug);
 
+  // If not in server initial data or Supabase, resolve via client fallback (localStorage)
   if (!project) {
-    notFound();
+    return <ProjectClientFallback slug={slug} />;
   }
 
   // Fetch all projects for related suggestions

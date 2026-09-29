@@ -19,15 +19,9 @@ export function getLocalProjects(): Project[] {
       }
     }
   } catch {
-    // ignore json parse or localStorage issues
-  }
-
-  // initialize with initial projects
-  try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_PROJECTS));
-  } catch {
     // ignore
   }
+
   return INITIAL_PROJECTS;
 }
 
@@ -41,8 +35,9 @@ export function saveLocalProjects(projects: Project[]): void {
   }
 }
 
-// Fetch all projects with priority: Supabase -> localStorage -> INITIAL_PROJECTS
-export async function fetchAllProjects(): Promise<{ projects: Project[]; source: 'supabase' | 'local' }> {
+// Fetch all projects with priority: Supabase -> Server File / API -> localStorage -> INITIAL_PROJECTS
+export async function fetchAllProjects(): Promise<{ projects: Project[]; source: 'supabase' | 'server' | 'local' }> {
+  // 1. Check Supabase if explicitly configured
   if (isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase
@@ -70,8 +65,33 @@ export async function fetchAllProjects(): Promise<{ projects: Project[]; source:
         return { projects: mappedProjects, source: 'supabase' };
       }
     } catch {
-      // Supabase fetch failed or table doesn't exist yet, continue to fallback
+      // Continue to local file / API
     }
+  }
+
+  // 2. On server side (Node.js): read directly from src/data/projects.json
+  if (typeof window === 'undefined') {
+    try {
+      const { readProjectsFromFile } = await import('@/lib/serverProjectStore');
+      const serverProjects = readProjectsFromFile();
+      return { projects: serverProjects, source: 'server' };
+    } catch {
+      return { projects: INITIAL_PROJECTS, source: 'local' };
+    }
+  }
+
+  // 3. On client side: fetch from /api/projects
+  try {
+    const res = await fetch('/api/projects');
+    if (res.ok) {
+      const json = await res.json();
+      if (Array.isArray(json.projects) && json.projects.length > 0) {
+        saveLocalProjects(json.projects);
+        return { projects: json.projects, source: 'server' };
+      }
+    }
+  } catch {
+    // Continue to localStorage
   }
 
   return { projects: getLocalProjects(), source: 'local' };
@@ -79,6 +99,7 @@ export async function fetchAllProjects(): Promise<{ projects: Project[]; source:
 
 // Fetch single project by slug
 export async function fetchProjectBySlug(slug: string): Promise<Project | null> {
+  // 1. Check Supabase if configured
   if (isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase
@@ -104,16 +125,53 @@ export async function fetchProjectBySlug(slug: string): Promise<Project | null> 
         };
       }
     } catch {
-      // fallback to local lookup
+      // Continue to local file lookup
     }
   }
 
+  // 2. On server side: read directly from src/data/projects.json
+  if (typeof window === 'undefined') {
+    try {
+      const { readProjectsFromFile } = await import('@/lib/serverProjectStore');
+      const serverProjects = readProjectsFromFile();
+      const found = serverProjects.find((p) => p.slug.toLowerCase() === slug.toLowerCase());
+      if (found) return found;
+    } catch {
+      // Continue to INITIAL_PROJECTS
+    }
+    return INITIAL_PROJECTS.find((p) => p.slug.toLowerCase() === slug.toLowerCase()) || null;
+  }
+
+  // 3. On client side: check cache then fallback
   const local = getLocalProjects();
   return local.find((p) => p.slug.toLowerCase() === slug.toLowerCase()) || null;
 }
 
 // Create new project
 export async function createProject(input: ProjectInput): Promise<{ project: Project; success: boolean; error?: string }> {
+  // 1. If in browser, save via API route to persist on server file
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/projects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.project) {
+          const existing = getLocalProjects();
+          const updated = [json.project, ...existing.filter((p) => p.id !== json.project.id && p.slug !== json.project.slug)];
+          saveLocalProjects(updated);
+          return { project: json.project, success: true };
+        }
+      }
+    } catch (err) {
+      console.warn('API POST /api/projects error, falling back to local cache', err);
+    }
+  }
+
+  // 2. Direct server save (if executed in server environment)
   const newId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `proj-${Date.now()}`;
   const now = new Date().toISOString();
 
@@ -124,40 +182,18 @@ export async function createProject(input: ProjectInput): Promise<{ project: Pro
     updated_at: now
   };
 
-  let savedToSupabase = false;
-
-  if (isSupabaseConfigured && supabase) {
+  if (typeof window === 'undefined') {
     try {
-      const { data, error } = await supabase
-        .from('projects')
-        .insert([
-          {
-            id: newProject.id,
-            title: newProject.title,
-            slug: newProject.slug,
-            image: newProject.image,
-            description: newProject.description,
-            category: newProject.category,
-            project_url: newProject.project_url,
-            technologies: newProject.technologies,
-            featured: newProject.featured,
-            case_study: newProject.case_study,
-            created_at: newProject.created_at,
-            updated_at: newProject.updated_at
-          }
-        ])
-        .select()
-        .single();
-
-      if (!error && data) {
-        savedToSupabase = true;
-      }
+      const { readProjectsFromFile, writeProjectsToFile } = await import('@/lib/serverProjectStore');
+      const projects = readProjectsFromFile();
+      writeProjectsToFile([newProject, ...projects]);
+      return { project: newProject, success: true };
     } catch {
-      // supabase insert error
+      // fallback
     }
   }
 
-  // Update local storage copy
+  // 3. Local storage fallback
   const existing = getLocalProjects();
   const updated = [newProject, ...existing.filter((p) => p.id !== newProject.id && p.slug !== newProject.slug)];
   saveLocalProjects(updated);
@@ -167,6 +203,30 @@ export async function createProject(input: ProjectInput): Promise<{ project: Pro
 
 // Update existing project
 export async function updateProject(id: string, input: Partial<ProjectInput>): Promise<{ project: Project | null; success: boolean }> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch(`/api/projects/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.project) {
+          const existing = getLocalProjects();
+          const idx = existing.findIndex((p) => p.id === id);
+          if (idx !== -1) {
+            existing[idx] = json.project;
+            saveLocalProjects(existing);
+          }
+          return { project: json.project, success: true };
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+
   const existing = getLocalProjects();
   const index = existing.findIndex((p) => p.id === id);
   if (index === -1) return { project: null, success: false };
@@ -177,28 +237,6 @@ export async function updateProject(id: string, input: Partial<ProjectInput>): P
     updated_at: new Date().toISOString()
   };
 
-  if (isSupabaseConfigured && supabase) {
-    try {
-      await supabase
-        .from('projects')
-        .update({
-          title: updatedProject.title,
-          slug: updatedProject.slug,
-          image: updatedProject.image,
-          description: updatedProject.description,
-          category: updatedProject.category,
-          project_url: updatedProject.project_url,
-          technologies: updatedProject.technologies,
-          featured: updatedProject.featured,
-          case_study: updatedProject.case_study,
-          updated_at: updatedProject.updated_at
-        })
-        .eq('id', id);
-    } catch {
-      // ignore
-    }
-  }
-
   existing[index] = updatedProject;
   saveLocalProjects(existing);
 
@@ -207,9 +245,11 @@ export async function updateProject(id: string, input: Partial<ProjectInput>): P
 
 // Delete project
 export async function deleteProject(id: string): Promise<boolean> {
-  if (isSupabaseConfigured && supabase) {
+  if (typeof window !== 'undefined') {
     try {
-      await supabase.from('projects').delete().eq('id', id);
+      await fetch(`/api/projects/${id}`, {
+        method: 'DELETE'
+      });
     } catch {
       // ignore
     }
@@ -221,36 +261,31 @@ export async function deleteProject(id: string): Promise<boolean> {
   return true;
 }
 
-// Upload project image to Supabase Storage bucket 'project-images' or convert to local data URL
+// Upload project image to server file storage or fallback
 export async function uploadProjectImage(file: File): Promise<string> {
-  if (isSupabaseConfigured && supabase) {
+  // 1. Try local server upload endpoint /api/upload
+  if (typeof window !== 'undefined') {
     try {
-      const ext = file.name.split('.').pop() || 'jpg';
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${ext}`;
-      const filePath = `uploads/${fileName}`;
+      const formData = new FormData();
+      formData.append('file', file);
 
-      const { error: uploadError } = await supabase.storage
-        .from('project-images')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: true
-        });
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
 
-      if (!uploadError) {
-        const { data } = supabase.storage
-          .from('project-images')
-          .getPublicUrl(filePath);
-
-        if (data?.publicUrl) {
-          return data.publicUrl;
+      if (res.ok) {
+        const json = await res.json();
+        if (json.url) {
+          return json.url;
         }
       }
-    } catch {
-      // fallback to reader
+    } catch (err) {
+      console.warn('Local /api/upload failed, falling back to data URL', err);
     }
   }
 
-  // Fallback to Data URL for instant offline or preview support
+  // 2. Fallback to Data URL
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
