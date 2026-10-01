@@ -5,6 +5,8 @@ import { INITIAL_PROJECTS } from '@/data/initialProjects';
 import ProjectDetailClient from '@/components/projects/ProjectDetailClient';
 import ProjectClientFallback from '@/components/projects/ProjectClientFallback';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 export const dynamicParams = true;
 
 interface PageProps {

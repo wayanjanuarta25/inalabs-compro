@@ -167,7 +167,7 @@ export default function PortfolioSection() {
                     : 'bg-[#090909] border-white/[0.07] hover:border-white/[0.2] shadow-xl'
                 }`}
               >
-                <Link href={`/projects/${project.slug}`} className="flex flex-col h-full justify-between">
+                <div className="flex flex-col h-full justify-between">
                   <div>
                     {/* Image Container (16:9 landscape ratio - Clickable Preview) */}
                     <div
@@ -235,34 +235,61 @@ export default function PortfolioSection() {
                       </div>
                     </div>
 
-                    {/* Title */}
+                    {/* Title & Live URL Link */}
                     <div className="flex items-start justify-between gap-2 mb-2">
-                      <h4
-                        className={`text-base font-medium tracking-tight font-display line-clamp-1 transition-colors ${
+                      <Link
+                        href={`/projects/${project.slug}`}
+                        className={`text-base font-medium tracking-tight font-display line-clamp-1 transition-colors flex-1 ${
                           isLight
-                            ? 'text-slate-950 group-hover:text-blue-600'
-                            : 'text-white group-hover:text-cyan-300'
+                            ? 'text-slate-950 hover:text-blue-600'
+                            : 'text-white hover:text-cyan-300'
                         }`}
+                        title="Lihat Detail Studi Kasus"
                       >
                         {project.title}
-                      </h4>
-                      <ArrowUpRight
-                        className={`w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${
-                          isLight
-                            ? 'text-slate-400 group-hover:text-blue-600'
-                            : 'text-neutral-500 group-hover:text-white'
-                        }`}
-                      />
+                      </Link>
+
+                      {project.project_url ? (
+                        <a
+                          href={project.project_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Buka Website Langsung (Live Demo)"
+                          className={`shrink-0 p-1 -mr-1 -mt-0.5 rounded-lg transition-all duration-200 ${
+                            isLight
+                              ? 'text-blue-600 hover:text-blue-700 hover:bg-blue-50'
+                              : 'text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10'
+                          }`}
+                        >
+                          <ArrowUpRight className="w-4 h-4 transition-transform duration-200 hover:translate-x-0.5 hover:-translate-y-0.5" />
+                        </a>
+                      ) : (
+                        <Link
+                          href={`/projects/${project.slug}`}
+                          title="Lihat Detail Studi Kasus"
+                          className={`shrink-0 p-1 -mr-1 -mt-0.5 ${
+                            isLight
+                              ? 'text-slate-400 hover:text-blue-600'
+                              : 'text-neutral-500 hover:text-white'
+                          }`}
+                        >
+                          <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        </Link>
+                      )}
                     </div>
 
                     {/* Description */}
-                    <p
-                      className={`text-xs font-light leading-relaxed line-clamp-2 mb-4 ${
-                        isLight ? 'text-slate-600' : 'text-neutral-400'
-                      }`}
-                    >
-                      {project.description}
-                    </p>
+                    <Link href={`/projects/${project.slug}`} className="block">
+                      <p
+                        className={`text-xs font-light leading-relaxed line-clamp-2 mb-4 transition-colors ${
+                          isLight
+                            ? 'text-slate-600 hover:text-slate-900'
+                            : 'text-neutral-400 hover:text-neutral-200'
+                        }`}
+                      >
+                        {project.description}
+                      </p>
+                    </Link>
                   </div>
 
                   {/* Card Bottom Meta */}
@@ -276,9 +303,27 @@ export default function PortfolioSection() {
                     <span className="truncate max-w-[130px]">
                       {project.technologies.slice(0, 2).join(' / ')}
                     </span>
-                    <span>{new Date(project.created_at).getFullYear()}</span>
+
+                    {project.project_url ? (
+                      <a
+                        href={project.project_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`inline-flex items-center gap-1 transition-colors ${
+                          isLight
+                            ? 'text-blue-600 hover:underline hover:text-blue-700'
+                            : 'text-cyan-400 hover:underline hover:text-cyan-300'
+                        }`}
+                        title="Buka Website Langsung"
+                      >
+                        <span>Live Demo</span>
+                        <ArrowUpRight className="w-3 h-3" />
+                      </a>
+                    ) : (
+                      <span>{new Date(project.created_at).getFullYear()}</span>
+                    )}
                   </div>
-                </Link>
+                </div>
               </motion.div>
             ))}
           </AnimatePresence>

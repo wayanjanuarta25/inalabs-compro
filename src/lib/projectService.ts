@@ -82,7 +82,7 @@ export async function fetchAllProjects(): Promise<{ projects: Project[]; source:
 
   // 3. On client side: fetch from /api/projects
   try {
-    const res = await fetch('/api/projects');
+    const res = await fetch('/api/projects', { cache: 'no-store' });
     if (res.ok) {
       const json = await res.json();
       if (Array.isArray(json.projects) && json.projects.length > 0) {

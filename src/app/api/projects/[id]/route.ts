@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { ProjectInput } from '@/types/project';
 import { readProjectsFromFile, writeProjectsToFile } from '@/lib/serverProjectStore';
+
+export const dynamic = 'force-dynamic';
 
 interface RouteContext {
   params: Promise<{
@@ -29,6 +32,14 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
     projects[index] = updatedProject;
     writeProjectsToFile(projects);
 
+    try {
+      revalidatePath('/');
+      revalidatePath(`/projects/${updatedProject.slug}`);
+      revalidatePath('/projects', 'layout');
+    } catch {
+      // ignore
+    }
+
     return NextResponse.json({ project: updatedProject, success: true });
   } catch (error) {
     return NextResponse.json(
@@ -45,6 +56,14 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
     const filtered = projects.filter((p) => p.id !== id);
 
     writeProjectsToFile(filtered);
+
+    try {
+      revalidatePath('/');
+      revalidatePath('/projects', 'layout');
+    } catch {
+      // ignore
+    }
+
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json(

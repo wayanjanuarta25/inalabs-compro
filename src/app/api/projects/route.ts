@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { Project, ProjectInput } from '@/types/project';
 import { readProjectsFromFile, writeProjectsToFile } from '@/lib/serverProjectStore';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
     const projects = readProjectsFromFile();
-    return NextResponse.json({ projects, source: 'server_file' });
+    return NextResponse.json(
+      { projects, source: 'server_file' },
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+        }
+      }
+    );
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to read projects from server file' },
@@ -46,6 +56,13 @@ export async function POST(request: NextRequest) {
 
     const updatedProjects = [newProject, ...projects];
     writeProjectsToFile(updatedProjects);
+
+    try {
+      revalidatePath('/');
+      revalidatePath('/projects', 'layout');
+    } catch {
+      // ignore
+    }
 
     return NextResponse.json({ project: newProject, success: true }, { status: 201 });
   } catch (error) {
