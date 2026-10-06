@@ -17,7 +17,7 @@ export function readProjectsFromFile(): Project[] {
     }
     const content = fs.readFileSync(DATA_FILE_PATH, 'utf8');
     const parsed = JSON.parse(content);
-    if (Array.isArray(parsed) && parsed.length > 0) {
+    if (Array.isArray(parsed)) {
       return parsed;
     }
   } catch (error) {

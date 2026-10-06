@@ -2,7 +2,7 @@ import { Project, ProjectInput } from '@/types/project';
 import { INITIAL_PROJECTS } from '@/data/initialProjects';
 import { supabase, isSupabaseConfigured } from './supabase';
 
-const LOCAL_STORAGE_KEY = 'inalabs_projects_cache_v1';
+const LOCAL_STORAGE_KEY = 'inalabs_projects_cache_v2';
 
 // Helper to get local projects from browser storage or fallback
 export function getLocalProjects(): Project[] {
@@ -14,7 +14,7 @@ export function getLocalProjects(): Project[] {
     const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (cached) {
       const parsed = JSON.parse(cached);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         return parsed;
       }
     }
@@ -85,7 +85,7 @@ export async function fetchAllProjects(): Promise<{ projects: Project[]; source:
     const res = await fetch('/api/projects', { cache: 'no-store' });
     if (res.ok) {
       const json = await res.json();
-      if (Array.isArray(json.projects) && json.projects.length > 0) {
+      if (Array.isArray(json.projects)) {
         saveLocalProjects(json.projects);
         return { projects: json.projects, source: 'server' };
       }
